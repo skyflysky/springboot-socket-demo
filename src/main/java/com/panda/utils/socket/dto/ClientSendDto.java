@@ -9,7 +9,8 @@ import java.io.Serializable;
  * @date 2019-01-24 16:11
  */
 @Data
-public class ClientSendDto implements Serializable {
+public class ClientSendDto implements Serializable
+{
 
 	private static final long serialVersionUID = 97085384412852967L;
 

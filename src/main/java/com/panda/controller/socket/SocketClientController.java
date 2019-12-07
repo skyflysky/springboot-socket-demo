@@ -24,7 +24,8 @@ import java.util.Set;
 @RestController
 @RequestMapping("/socket-client")
 @Slf4j
-public class SocketClientController {
+public class SocketClientController
+{
 
 	@Resource(name = "clientTaskPool")
 	private ThreadPoolTaskExecutor clientExecutor;
@@ -33,12 +34,14 @@ public class SocketClientController {
 	private SocketClientService socketClientService;
 
 	/**
-	 * @param paramVo 用户id
+	 * @param paramVo
+	 *            用户id
 	 *
 	 * @return 是否操作成功
 	 */
 	@PostMapping("/start")
-	public ResponseEntity<?> startClient(@RequestBody ClientParamVo paramVo) {
+	public ResponseEntity<?> startClient(@RequestBody ClientParamVo paramVo)
+	{
 		String userId = paramVo.getUserId();
 		socketClientService.startOneClient(userId);
 		return ResponseEntity.success();
@@ -47,28 +50,34 @@ public class SocketClientController {
 	/**
 	 * 关闭客户端
 	 *
-	 * @param paramVo userId
+	 * @param paramVo
+	 *            userId
 	 *
 	 * @return 是否操作成功
 	 */
 	@PostMapping("/close")
-	public ResponseEntity<?> closeClient(@RequestBody ClientParamVo paramVo) {
+	public ResponseEntity<?> closeClient(@RequestBody ClientParamVo paramVo)
+	{
 		String userId = paramVo.getUserId();
 		socketClientService.closeOneClient(userId);
 		return ResponseEntity.success();
 	}
 
 	@GetMapping("/get-users")
-	public ResponseEntity<Set<String>> getUsers() {
+	public ResponseEntity<Set<String>> getUsers()
+	{
 		return ResponseEntity.success(SocketClientServiceImpl.existSocketClientMap.keySet());
 	}
 
 	@PostMapping("/send-message")
-	public ResponseEntity<?> sendMessage(@RequestBody ClientParamVo paramVo) {
-		if (StringUtils.isEmpty(paramVo.getUserId()) || StringUtils.isEmpty(paramVo.getMessage())) {
+	public ResponseEntity<?> sendMessage(@RequestBody ClientParamVo paramVo)
+	{
+		if (StringUtils.isEmpty(paramVo.getUserId()) || StringUtils.isEmpty(paramVo.getMessage()))
+		{
 			throw new ServiceException("参数不全");
 		}
-		if (!SocketClientServiceImpl.existSocketClientMap.containsKey(paramVo.getUserId())) {
+		if (!SocketClientServiceImpl.existSocketClientMap.containsKey(paramVo.getUserId()))
+		{
 			throw new ServiceException("并没有客户端连接");
 		}
 		SocketClient client = SocketClientServiceImpl.existSocketClientMap.get(paramVo.getUserId()).getSocketClient();

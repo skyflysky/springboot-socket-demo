@@ -19,22 +19,25 @@ import java.util.Date;
 /**
  * @ClassName：SystemExceptionHandler
  * @Description：TODO
- * @author：huangyongfa
- * @date：2017年08月08日
+ * @author：huangyongfa @date：2017年08月08日
  */
 @ControllerAdvice
-public class SystemExceptionHandler {
+public class SystemExceptionHandler
+{
 
 	private Logger logger = LoggerFactory.getLogger(this.getClass());
 
 	/**
 	 * 解决Form请求无法转换日期问题
 	 *
-	 * @param binder  绑定器
-	 * @param request 请求体
+	 * @param binder
+	 *            绑定器
+	 * @param request
+	 *            请求体
 	 */
 	@InitBinder
-	private void initBinder(WebDataBinder binder, WebRequest request) {
+	private void initBinder(WebDataBinder binder, WebRequest request)
+	{
 		// 转换日期
 		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		// CustomDateEditor为自定义日期编辑器
@@ -48,32 +51,31 @@ public class SystemExceptionHandler {
 	 *
 	 * @return
 	 *
-	 * @throws
-	 * @see
+	 * @throws @see
 	 */
 	@ExceptionHandler(ServiceException.class)
 	@ResponseStatus(value = HttpStatus.OK)
-	public @ResponseBody
-	ResponseEntity<String> handleServcerException(ServiceException exception) {
+	public @ResponseBody ResponseEntity<String> handleServcerException(ServiceException exception)
+	{
 		logger.error("system service exception handler,exception code:{},msg:{}", exception.getErrorCode(),
 				exception.getMessage());
 		return new ResponseEntity<String>().ERROR(exception);
 	}
 
-
 	@ExceptionHandler(org.springframework.web.servlet.NoHandlerFoundException.class)
 	@ResponseStatus(value = HttpStatus.OK)
 	@ResponseBody
-	public ResponseEntity<String> noHandlerFoundException(org.springframework.web.servlet.NoHandlerFoundException e) {
+	public ResponseEntity<String> noHandlerFoundException(org.springframework.web.servlet.NoHandlerFoundException e)
+	{
 		logger.error(e.getMessage(), e);
 		return new ResponseEntity<String>().ERROR(new ServiceException("没有找到该页面"));
 	}
 
-
 	/**
 	 * 处理@requestParam不存在的异常
 	 *
-	 * @param exception 异常
+	 * @param exception
+	 *            异常
 	 *
 	 * @return 返回responseEntity
 	 */
@@ -81,7 +83,8 @@ public class SystemExceptionHandler {
 	@ResponseStatus(value = HttpStatus.OK)
 	@ResponseBody
 	public ResponseEntity<String> handleMissingServletRequestParameterException(
-			MissingServletRequestParameterException exception) {
+			MissingServletRequestParameterException exception)
+	{
 		logger.error("system runtime exception handler:", exception);
 		return new ResponseEntity<String>().ERROR(new ServiceException(exception.getMessage(), exception));
 	}
@@ -89,7 +92,8 @@ public class SystemExceptionHandler {
 	/**
 	 * 处理请求类型不一致的异常
 	 *
-	 * @param exception 异常
+	 * @param exception
+	 *            异常
 	 *
 	 * @return 返回responseEntity
 	 */
@@ -97,7 +101,8 @@ public class SystemExceptionHandler {
 	@ResponseStatus(value = HttpStatus.OK)
 	@ResponseBody
 	public ResponseEntity<String> handleHttpRequestMethodNotSupportedException(
-			HttpRequestMethodNotSupportedException exception) {
+			HttpRequestMethodNotSupportedException exception)
+	{
 		logger.error("system runtime exception handler:", exception);
 		return new ResponseEntity<String>().ERROR(new ServiceException(exception.getMessage(), exception));
 	}

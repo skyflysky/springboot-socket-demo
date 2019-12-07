@@ -12,10 +12,12 @@ import java.util.concurrent.ThreadPoolExecutor;
  * @author J.y
  */
 @Configuration
-public class ThreadPoolConfigurer {
+public class ThreadPoolConfigurer
+{
 
 	@Bean(name = "clientTaskPool")
-	public ThreadPoolTaskExecutor clientTaskPool() {
+	public ThreadPoolTaskExecutor clientTaskPool()
+	{
 		ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
 		executor.setCorePoolSize(5);
 		executor.setKeepAliveSeconds(60);
@@ -27,7 +29,8 @@ public class ThreadPoolConfigurer {
 	}
 
 	@Bean(name = "clientMessageTaskPool")
-	public ThreadPoolTaskExecutor clientMessageTaskPool() {
+	public ThreadPoolTaskExecutor clientMessageTaskPool()
+	{
 		ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
 		executor.setCorePoolSize(5);
 		executor.setKeepAliveSeconds(60);

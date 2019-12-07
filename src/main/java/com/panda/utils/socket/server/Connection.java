@@ -18,7 +18,8 @@ import static com.panda.utils.socket.constants.SocketConstant.RETRY_COUNT;
  */
 @Slf4j
 @Data
-public class Connection {
+public class Connection
+{
 
 	/**
 	 * 当前的socket连接实例
@@ -50,29 +51,37 @@ public class Connection {
 	 */
 	private Date lastOnTime;
 
-	public Connection(Socket socket, ConnectionThread connectionThread) {
+	public Connection(Socket socket, ConnectionThread connectionThread)
+	{
 		this.socket = socket;
 		this.connectionThread = connectionThread;
 	}
 
-	public void println(String message) {
+	public void println(String message)
+	{
 		int count = 0;
 		PrintWriter writer;
-		do {
-			try {
+		do
+		{
+			try
+			{
 				writer = new PrintWriter(new OutputStreamWriter(socket.getOutputStream()), true);
 				writer.println(message);
 				break;
-			} catch (IOException e) {
+			} catch (IOException e)
+			{
 				count++;
-				if (count >= RETRY_COUNT) {
-					//重试多次失败，说明client端socket异常
+				if (count >= RETRY_COUNT)
+				{
+					// 重试多次失败，说明client端socket异常
 					this.connectionThread.stopRunning();
 				}
 			}
-			try {
+			try
+			{
 				Thread.sleep(2 * 1000);
-			} catch (InterruptedException e1) {
+			} catch (InterruptedException e1)
+			{
 				log.error("Connection.println.IOException interrupt,userId:{}", userId);
 			}
 		} while (count < 3);

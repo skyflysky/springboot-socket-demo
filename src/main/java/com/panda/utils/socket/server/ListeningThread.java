@@ -12,7 +12,8 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 @Slf4j
-class ListeningThread extends Thread {
+class ListeningThread extends Thread
+{
 
 	private SocketServer socketServer;
 
@@ -20,7 +21,8 @@ class ListeningThread extends Thread {
 
 	private boolean isRunning;
 
-	public ListeningThread(SocketServer socketServer) {
+	public ListeningThread(SocketServer socketServer)
+	{
 		this.socketServer = socketServer;
 		this.serverSocket = socketServer.getServerSocket();
 		isRunning = true;
@@ -28,17 +30,22 @@ class ListeningThread extends Thread {
 	}
 
 	@Override
-	public void run() {
-		while (isRunning) {
-			if (serverSocket.isClosed()) {
+	public void run()
+	{
+		while (isRunning)
+		{
+			if (serverSocket.isClosed())
+			{
 				isRunning = false;
 				break;
 			}
-			try {
+			try
+			{
 				Socket socket;
 				socket = serverSocket.accept();
-				if (socketServer.getExistConnectionThreadList().size() > SocketConstant.MAX_SOCKET_THREAD_NUM) {
-					//超过线程数量
+				if (socketServer.getExistConnectionThreadList().size() > SocketConstant.MAX_SOCKET_THREAD_NUM)
+				{
+					// 超过线程数量
 					PrintWriter writer = new PrintWriter(new OutputStreamWriter(socket.getOutputStream()), true);
 					ServerSendDto dto = new ServerSendDto();
 					dto.setStatusCode(999);
@@ -46,13 +53,14 @@ class ListeningThread extends Thread {
 					writer.println(JSONObject.toJSONString(dto));
 					socket.close();
 				}
-				//设置超时时间为5s（有心跳机制了不需要设置）
-				//				socket.setSoTimeout(5 * 1000);
+				// 设置超时时间为5s（有心跳机制了不需要设置）
+				// socket.setSoTimeout(5 * 1000);
 				ConnectionThread connectionThread = new ConnectionThread(socket, socketServer);
 				socketServer.getExistConnectionThreadList().add(connectionThread);
-				//todo:这边最好用线程池
+				// todo:这边最好用线程池
 				connectionThread.start();
-			} catch (IOException e) {
+			} catch (IOException e)
+			{
 				log.error("ListeningThread.run failed,exception:{}", e.getMessage());
 			}
 		}
@@ -61,10 +69,12 @@ class ListeningThread extends Thread {
 	/**
 	 * 关闭所有的socket客户端连接的线程
 	 */
-	public void stopRunning() {
-		for (ConnectionThread currentThread : socketServer.getExistConnectionThreadList()) {
+	public void stopRunning()
+	{
+		for (ConnectionThread currentThread : socketServer.getExistConnectionThreadList())
+		{
 			currentThread.stopRunning();
 		}
 		isRunning = false;
 	}
-} 
+}

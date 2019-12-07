@@ -6,10 +6,10 @@ package com.panda.core;
  * @param <T>
  *
  * @ClassName：ResponseEntity
- * @author：huangyongfa
- * @date：2017年08月08日
+ * @author：huangyongfa @date：2017年08月08日
  */
-public class ResponseEntity<T> {
+public class ResponseEntity<T>
+{
 
 	private Integer code;
 
@@ -24,7 +24,8 @@ public class ResponseEntity<T> {
 	 *
 	 * @return
 	 */
-	public static <T> ResponseEntity<T> success() {
+	public static <T> ResponseEntity<T> success()
+	{
 		return new ResponseEntity<T>().OK();
 	}
 
@@ -36,7 +37,8 @@ public class ResponseEntity<T> {
 	 *
 	 * @return
 	 */
-	public static <T> ResponseEntity<T> success(T data) {
+	public static <T> ResponseEntity<T> success(T data)
+	{
 		return new ResponseEntity<T>().OK(data);
 	}
 
@@ -49,18 +51,21 @@ public class ResponseEntity<T> {
 	 *
 	 * @return
 	 */
-	public static <T> ResponseEntity<T> success(T data, String message) {
+	public static <T> ResponseEntity<T> success(T data, String message)
+	{
 		return new ResponseEntity<T>().OK(data, message);
 	}
 
 	/**
 	 * 通过错误信息实体异常构造方法
 	 *
-	 * @param errorInfoEntity 错误信息实体类
+	 * @param errorInfoEntity
+	 *            错误信息实体类
 	 *
 	 * @return 异常信息的返回实例
 	 */
-	public static <T> ResponseEntity<T> fail(ErrorInfoEntity errorInfoEntity) {
+	public static <T> ResponseEntity<T> fail(ErrorInfoEntity errorInfoEntity)
+	{
 		return new ResponseEntity<T>().ERROR(new ServiceException(errorInfoEntity));
 	}
 
@@ -71,7 +76,8 @@ public class ResponseEntity<T> {
 	 *
 	 * @return
 	 */
-	public static <T> ResponseEntity<T> fail(ServiceException serviceException) {
+	public static <T> ResponseEntity<T> fail(ServiceException serviceException)
+	{
 		return new ResponseEntity<T>().ERROR(serviceException);
 	}
 
@@ -82,11 +88,13 @@ public class ResponseEntity<T> {
 	 *
 	 * @return
 	 */
-	public static <T> ResponseEntity<T> fail(T data, ServiceException serviceException) {
+	public static <T> ResponseEntity<T> fail(T data, ServiceException serviceException)
+	{
 		return new ResponseEntity<T>().ERROR(data, serviceException);
 	}
 
-	public Integer getCode() {
+	public Integer getCode()
+	{
 		return code;
 	}
 
@@ -96,11 +104,13 @@ public class ResponseEntity<T> {
 	 * @param code
 	 */
 	@Deprecated
-	public void setCode(Integer code) {
+	public void setCode(Integer code)
+	{
 		this.code = code;
 	}
 
-	public String getMessage() {
+	public String getMessage()
+	{
 		return message;
 	}
 
@@ -110,11 +120,13 @@ public class ResponseEntity<T> {
 	 * @param message
 	 */
 	@Deprecated
-	public void setMessage(String message) {
+	public void setMessage(String message)
+	{
 		this.message = message;
 	}
 
-	public T getData() {
+	public T getData()
+	{
 		return data;
 	}
 
@@ -124,7 +136,8 @@ public class ResponseEntity<T> {
 	 * @param data
 	 */
 	@Deprecated
-	public void setData(T data) {
+	public void setData(T data)
+	{
 		this.data = data;
 	}
 
@@ -134,7 +147,8 @@ public class ResponseEntity<T> {
 	 * @return
 	 */
 	@Deprecated
-	public ResponseEntity<T> OK() {
+	public ResponseEntity<T> OK()
+	{
 		return OK(null);
 	}
 
@@ -146,9 +160,11 @@ public class ResponseEntity<T> {
 	 * @return
 	 */
 	@Deprecated
-	public ResponseEntity<T> OK(T data) {
+	public ResponseEntity<T> OK(T data)
+	{
 		this.setCode(ErrorCode.IPER0001.getValue());
-		if (null != data) {
+		if (null != data)
+		{
 			this.setData(data);
 		}
 		return this;
@@ -163,12 +179,15 @@ public class ResponseEntity<T> {
 	 * @return
 	 */
 	@Deprecated
-	public ResponseEntity<T> OK(T data, String message) {
+	public ResponseEntity<T> OK(T data, String message)
+	{
 		this.setCode(ErrorCode.IPER0001.getValue());
-		if (null != data) {
+		if (null != data)
+		{
 			this.setData(data);
 		}
-		if (null != message) {
+		if (null != message)
+		{
 			this.setMessage(message);
 		}
 		return this;
@@ -182,7 +201,8 @@ public class ResponseEntity<T> {
 	 * @return
 	 */
 	@Deprecated
-	public ResponseEntity<T> ERROR(ServiceException serviceException) {
+	public ResponseEntity<T> ERROR(ServiceException serviceException)
+	{
 		this.setMessage(serviceException.getMessage());
 		this.setCode(serviceException.getErrorCode());
 		return this;
@@ -196,7 +216,8 @@ public class ResponseEntity<T> {
 	 * @return
 	 */
 	@Deprecated
-	public ResponseEntity<T> ERROR(T data, ServiceException serviceException) {
+	public ResponseEntity<T> ERROR(T data, ServiceException serviceException)
+	{
 		this.setData(data);
 		this.setMessage(serviceException.getMessage());
 		this.setCode(serviceException.getErrorCode());

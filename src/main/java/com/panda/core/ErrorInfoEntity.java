@@ -4,10 +4,10 @@ package com.panda.core;
  * Created With User-Center
  *
  * @author ChenHao
- * @date 2018/7/5
- * Target
+ * @date 2018/7/5 Target
  */
-public interface ErrorInfoEntity {
+public interface ErrorInfoEntity
+{
 
 	/**
 	 * 获取错误信息

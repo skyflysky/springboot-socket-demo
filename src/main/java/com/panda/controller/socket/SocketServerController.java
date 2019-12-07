@@ -20,27 +20,32 @@ import java.util.concurrent.ConcurrentMap;
  */
 @RestController
 @RequestMapping("/socket-server")
-public class SocketServerController {
+public class SocketServerController
+{
 
 	@Resource
 	private SocketServer socketServer;
 
 	@GetMapping("/get-users")
-	public ResponseEntity<JSONObject> getLoginUsers() {
+	public ResponseEntity<JSONObject> getLoginUsers()
+	{
 		ConcurrentMap<String, Connection> userMaps = socketServer.getExistSocketMap();
-		JSONObject result=new JSONObject();
-		result.put("total",userMaps.keySet().size());
-		result.put("dataList",userMaps.keySet());
+		JSONObject result = new JSONObject();
+		result.put("total", userMaps.keySet().size());
+		result.put("dataList", userMaps.keySet());
 		return ResponseEntity.success(result);
 	}
 
 	@PostMapping("/send-message")
-	public ResponseEntity<?> sendMessage(@RequestBody ServerParamVo paramVo) {
+	public ResponseEntity<?> sendMessage(@RequestBody ServerParamVo paramVo)
+	{
 
-		if (StringUtils.isEmpty(paramVo.getUserId()) || StringUtils.isEmpty(paramVo.getMessage())) {
+		if (StringUtils.isEmpty(paramVo.getUserId()) || StringUtils.isEmpty(paramVo.getMessage()))
+		{
 			throw new ServiceException("参数不全");
 		}
-		if (!socketServer.getExistSocketMap().containsKey(paramVo.getUserId())) {
+		if (!socketServer.getExistSocketMap().containsKey(paramVo.getUserId()))
+		{
 			throw new ServiceException("并没有客户端连接");
 		}
 		Connection connection = socketServer.getExistSocketMap().get(paramVo.getUserId());

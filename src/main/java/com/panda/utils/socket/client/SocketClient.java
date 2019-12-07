@@ -18,28 +18,35 @@ import java.util.Date;
  */
 @Slf4j
 @Data
-public class SocketClient {
+public class SocketClient
+{
 
 	private Socket socket;
 
 	private Date lastOnTime;
 
-	public SocketClient(InetAddress ip, int port) {
-		try {
+	public SocketClient(InetAddress ip, int port)
+	{
+		try
+		{
 			socket = new Socket(ip, port);
 			socket.setKeepAlive(true);
-		} catch (IOException e) {
+		} catch (IOException e)
+		{
 			// TODO Auto-generated catch block
 			log.error(e.getMessage());
 		}
 	}
 
-	public void println(String message) {
+	public void println(String message)
+	{
 		PrintWriter writer;
-		try {
+		try
+		{
 			writer = new PrintWriter(new OutputStreamWriter(socket.getOutputStream()), true);
 			writer.println(message);
-		} catch (IOException e) {
+		} catch (IOException e)
+		{
 			// TODO Auto-generated catch block
 			log.error(e.getMessage());
 		}
@@ -50,7 +57,8 @@ public class SocketClient {
 	 *
 	 * @return
 	 */
-	public String readLine() throws Exception {
+	public String readLine() throws Exception
+	{
 		BufferedReader reader;
 		reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 		return reader.readLine();
@@ -59,33 +67,39 @@ public class SocketClient {
 	/**
 	 * Ready for use.
 	 */
-	public void close() {
-		try {
+	public void close()
+	{
+		try
+		{
 			// Send a message to tell the server to close the connection.
 			PrintWriter writer = new PrintWriter(new OutputStreamWriter(socket.getOutputStream()), true);
 			ServerReceiveDto dto = new ServerReceiveDto();
 			dto.setFunctionCode(FunctionCodeEnum.CLOSE.getValue());
 			writer.println(JSONObject.toJSONString(dto));
 
-			if (socket != null && !socket.isClosed()) {
+			if (socket != null && !socket.isClosed())
+			{
 				socket.close();
 			}
-		} catch (IOException e) {
+		} catch (IOException e)
+		{
 			// TODO Auto-generated catch block
 			log.error(e.getMessage());
 		}
 	}
 
-	public static void main(String[] args) throws UnknownHostException, InterruptedException {
+	public static void main(String[] args) throws UnknownHostException, InterruptedException
+	{
 		SocketClient client = new SocketClient(InetAddress.getByName("127.0.0.1"), 60000);
 		ClientSendDto dto = new ClientSendDto();
 		dto.setFunctionCode(FunctionCodeEnum.LOGIN.getValue());
 		dto.setUserId("test1");
 		dto.setMessage("登陆信息啦\n");
-		//		Thread.sleep(6*1000);
+		// Thread.sleep(6*1000);
 		client.println(JSONObject.toJSONString(dto));
-		while (true) {
+		while (true)
+		{
 		}
-		//		client.close();
+		// client.close();
 	}
 }

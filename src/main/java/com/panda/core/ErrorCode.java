@@ -5,10 +5,10 @@ package com.panda.core;
  *
  * @ClassName：ErrorCode
  * @Description：TODO
- * @author：huangyongfa
- * @date：2017年08月08日
+ * @author：huangyongfa @date：2017年08月08日
  */
-public enum ErrorCode {
+public enum ErrorCode
+{
 
 	/**
 	 * 404找不到出错
@@ -47,15 +47,18 @@ public enum ErrorCode {
 
 	private Integer value;
 
-	private ErrorCode(Integer value) {
+	private ErrorCode(Integer value)
+	{
 		this.value = value;
 	}
 
-	public Integer getValue() {
+	public Integer getValue()
+	{
 		return value;
 	}
 
-	public void setValue(Integer value) {
+	public void setValue(Integer value)
+	{
 		this.value = value;
 	}
 

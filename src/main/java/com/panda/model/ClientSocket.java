@@ -12,7 +12,8 @@ import java.util.concurrent.ScheduledExecutorService;
  */
 @Data
 @AllArgsConstructor
-public class ClientSocket {
+public class ClientSocket
+{
 
 	private SocketClient socketClient;
 

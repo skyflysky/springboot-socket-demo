@@ -25,13 +25,13 @@ import java.util.concurrent.*;
  */
 @Service
 @Slf4j
-public class SocketClientServiceImpl implements SocketClientService {
+public class SocketClientServiceImpl implements SocketClientService
+{
 
 	/**
 	 * 全局缓存，用于存储已存在的socket客户端连接
 	 */
 	public static ConcurrentMap<String, ClientSocket> existSocketClientMap = new ConcurrentHashMap<>();
-
 
 	@Resource(name = "clientTaskPool")
 	private ThreadPoolTaskExecutor clientExecutor;
@@ -40,38 +40,48 @@ public class SocketClientServiceImpl implements SocketClientService {
 	private ThreadPoolTaskExecutor messageExecutor;
 
 	@Override
-	public void startOneClient(String userId) {
-		if (existSocketClientMap.containsKey(userId)) {
+	public void startOneClient(String userId)
+	{
+		if (existSocketClientMap.containsKey(userId))
+		{
 			throw new ServiceException("该用户已登陆");
 		}
-		//异步创建socket
-		clientExecutor.execute(() -> {
-			//新建一个socket连接
+		// 异步创建socket
+		clientExecutor.execute(() ->
+		{
+			// 新建一个socket连接
 			SocketClient client;
-			try {
+			try
+			{
 				client = new SocketClient(InetAddress.getByName("127.0.0.1"), 60000);
-			} catch (UnknownHostException e) {
+			} catch (UnknownHostException e)
+			{
 				throw new ServiceException("socket新建失败");
 			}
 			client.setLastOnTime(new Date());
 
 			ScheduledExecutorService clientHeartExecutor = Executors
 					.newSingleThreadScheduledExecutor(r -> new Thread(r, "socket_client_heart_" + r.hashCode()));
-			ClientSocket clientSocket = new ClientSocket(client,clientHeartExecutor);
-			//登陆
+			ClientSocket clientSocket = new ClientSocket(client, clientHeartExecutor);
+			// 登陆
 			ClientSendDto dto = new ClientSendDto();
 			dto.setFunctionCode(FunctionCodeEnum.LOGIN.getValue());
 			dto.setUserId(userId);
 			client.println(JSONObject.toJSONString(dto));
-			messageExecutor.submit(() -> {
-				try {
+			messageExecutor.submit(() ->
+			{
+				try
+				{
 					String message;
-					while ((message = client.readLine()) != null) {
+					while ((message = client.readLine()) != null)
+					{
 						log.info("客户端:{}，获得消息：{}", userId, message);
 						ServerSendDto serverSendDto;
-						try {
+						try
+						{
 							serverSendDto = JSONObject.parseObject(message, ServerSendDto.class);
-						} catch (Exception e) {
+						} catch (Exception e)
+						{
 							ClientSendDto sendDto = new ClientSendDto();
 							sendDto.setFunctionCode(FunctionCodeEnum.MESSAGE.getValue());
 							sendDto.setMessage("data error");
@@ -79,31 +89,37 @@ public class SocketClientServiceImpl implements SocketClientService {
 							break;
 						}
 						Integer functionCode = serverSendDto.getFunctionCode();
-						if (functionCode.equals(FunctionCodeEnum.HEART.getValue())) {
-							//心跳类型
+						if (functionCode.equals(FunctionCodeEnum.HEART.getValue()))
+						{
+							// 心跳类型
 							client.setLastOnTime(new Date());
 						}
 					}
-				} catch (Exception e) {
+				} catch (Exception e)
+				{
 					log.error("客户端异常,userId:{},exception：{}", userId, e.getMessage());
 					client.close();
 					existSocketClientMap.remove(userId);
 				}
 			});
-			clientHeartExecutor.scheduleWithFixedDelay(() -> {
-				try {
+			clientHeartExecutor.scheduleWithFixedDelay(() ->
+			{
+				try
+				{
 
 					Date lastOnTime = client.getLastOnTime();
 					long heartDuration = (new Date()).getTime() - lastOnTime.getTime();
-					if (heartDuration > SocketConstant.HEART_RATE) {
-						//心跳超时,关闭当前线程
+					if (heartDuration > SocketConstant.HEART_RATE)
+					{
+						// 心跳超时,关闭当前线程
 						log.error("心跳超时");
 						throw new Exception("服务端已断开socket");
 					}
 					ClientSendDto heartDto = new ClientSendDto();
 					heartDto.setFunctionCode(FunctionCodeEnum.HEART.getValue());
 					client.println(JSONObject.toJSONString(heartDto));
-				} catch (Exception e) {
+				} catch (Exception e)
+				{
 					log.error("客户端异常,userId:{},exception：{}", userId, e.getMessage());
 					client.close();
 					existSocketClientMap.remove(userId);
@@ -116,8 +132,10 @@ public class SocketClientServiceImpl implements SocketClientService {
 	}
 
 	@Override
-	public void closeOneClient(String userId) {
-		if (!existSocketClientMap.containsKey(userId)) {
+	public void closeOneClient(String userId)
+	{
+		if (!existSocketClientMap.containsKey(userId))
+		{
 			throw new ServiceException("该用户未登陆，不能关闭");
 		}
 		ClientSocket clientSocket = existSocketClientMap.get(userId);

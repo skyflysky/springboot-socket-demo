@@ -6,7 +6,8 @@ package com.panda.utils.socket.enums;
  * @author 丁许
  * @date 2019-01-24 15:53
  */
-public enum FunctionCodeEnum {
+public enum FunctionCodeEnum
+{
 	/**
 	 * 心跳
 	 */
@@ -30,24 +31,29 @@ public enum FunctionCodeEnum {
 
 	private String desc;
 
-	FunctionCodeEnum(Integer value, String desc) {
+	FunctionCodeEnum(Integer value, String desc)
+	{
 		this.value = value;
 		this.desc = desc;
 	}
 
-	public Integer getValue() {
+	public Integer getValue()
+	{
 		return value;
 	}
 
-	public void setValue(Integer value) {
+	public void setValue(Integer value)
+	{
 		this.value = value;
 	}
 
-	public String getDesc() {
+	public String getDesc()
+	{
 		return desc;
 	}
 
-	public void setDesc(String desc) {
+	public void setDesc(String desc)
+	{
 		this.desc = desc;
 	}
 }
